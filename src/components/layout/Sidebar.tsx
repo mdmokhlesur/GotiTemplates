@@ -46,7 +46,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     >
       {/* Logo */}
       <div className={cn('flex items-center gap-3 p-4 border-b', collapsed && 'justify-center')} style={{ borderColor: 'var(--border)' }}>
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--emerald), #2F7D5B)' }}>
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--emerald), var(--emerald-hover))' }}>
           <span className="text-white font-bold text-sm font-body z-10">PE</span>
           <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(circle at 30% 30%, white, transparent)' }} />
         </div>

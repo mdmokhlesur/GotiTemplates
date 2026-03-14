@@ -32,7 +32,7 @@ export function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
           <Menu className="h-4 w-4" />
         </button>
         <div className="flex items-center gap-2 md:hidden">
-          <div className="w-7 h-7 rounded-md flex items-center justify-center" style={{ background: 'linear-gradient(135deg, var(--emerald), #2F7D5B)' }}>
+          <div className="w-7 h-7 rounded-md flex items-center justify-center"          style={{ background: 'linear-gradient(135deg, var(--emerald), var(--emerald-hover))' }}>
             <span className="text-white font-bold text-xs font-body">PE</span>
           </div>
           <span className="font-display text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>PropEdge</span>

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,48 +6,27 @@
 
 @layer base {
   :root {
-    --bg: #F5F1E8;
-    --bg-card: #FAF7F2;
-    --bg-surface: #F0EBE0;
-    --border: #E3DDD3;
-    --border-strong: #CFC8BD;
-    --text-primary: #2C2C2C;
-    --text-secondary: #6F6A62;
-    --text-muted: #9C9890;
-    --emerald: #1E4D3A;
-    --emerald-hover: #25624A;
-    --emerald-light: #E8F2ED;
-    --coral: #C44B3A;
-    --coral-light: #FDECEA;
-    --gold: #B89A5B;
-    --gold-tint: #D5C6A1;
-    --gold-light: #FBF6EC;
-    --intel-blue: #7DA8B5;
-    --intel-blue-light: #EBF3F6;
-    --card-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    /* ── Client Design System ── */
+    --bg: #0A1423;
+    --bg-card: #0F1C2E;
+    --bg-surface: #132035;
+    --border: #1E3050;
+    --border-strong: #2A3F60;
+    --text-primary: #E8F0FA;
+    --text-secondary: #8BA3C4;
+    --text-muted: #5A7499;
+    --emerald: #00E5A8;
+    --emerald-hover: #00C994;
+    --emerald-light: rgba(0, 229, 168, 0.12);
+    --coral: #FF4D6D;
+    --coral-light: rgba(255, 77, 109, 0.12);
+    --gold: #FFC857;
+    --gold-tint: #FFDB8A;
+    --gold-light: rgba(255, 200, 87, 0.12);
+    --intel-blue: #4A9EFF;
+    --intel-blue-light: rgba(74, 158, 255, 0.12);
+    --card-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
     --radius: 0.75rem;
-  }
-
-  .dark {
-    --bg: #121816;
-    --bg-card: #1B2320;
-    --bg-surface: #222C28;
-    --border: #2A3830;
-    --border-strong: #384840;
-    --text-primary: #E6E3DC;
-    --text-secondary: #A6A39A;
-    --text-muted: #6F6A62;
-    --emerald: #2F7D5B;
-    --emerald-hover: #3C9A72;
-    --emerald-light: #1A2E24;
-    --coral: #D15A48;
-    --coral-light: #2E1A18;
-    --gold: #C6A96B;
-    --gold-tint: #8A7040;
-    --gold-light: #2A2010;
-    --intel-blue: #7DA8B5;
-    --intel-blue-light: #1A2830;
-    --card-shadow: 0 2px 16px rgba(0,0,0,0.35);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -60,7 +39,9 @@
   }
 
   h1, h2, h3, h4 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
   }
 }
 

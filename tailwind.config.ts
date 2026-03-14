@@ -10,42 +10,50 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        display: ['"Playfair Display"', 'Georgia', 'serif'],
+        display: ['Inter', 'system-ui', 'sans-serif'],
         body: ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        // Light mode
-        ivory: '#F5F1E8',
-        'ivory-card': '#FAF7F2',
+        // Client Design System
+        navy: {
+          DEFAULT: '#0A1423',
+          panel: '#0F1C2E',
+          surface: '#132035',
+          border: '#1E3050',
+        },
+        accent: {
+          green: '#00E5A8',
+          'green-hover': '#00C994',
+          gold: '#FFC857',
+          'gold-tint': '#FFDB8A',
+          danger: '#FF4D6D',
+          blue: '#4A9EFF',
+        },
         emerald: {
-          DEFAULT: '#1E4D3A',
-          hover: '#25624A',
-          light: '#E8F2ED',
+          DEFAULT: '#00E5A8',
+          hover: '#00C994',
+          light: 'rgba(0,229,168,0.12)',
         },
         coral: {
-          DEFAULT: '#C44B3A',
-          light: '#FDECEA',
+          DEFAULT: '#FF4D6D',
+          light: 'rgba(255,77,109,0.12)',
         },
         gold: {
-          DEFAULT: '#B89A5B',
-          tint: '#D5C6A1',
-          light: '#FBF6EC',
+          DEFAULT: '#FFC857',
+          tint: '#FFDB8A',
+          light: 'rgba(255,200,87,0.12)',
         },
         'intel-blue': {
-          DEFAULT: '#7DA8B5',
-          light: '#EBF3F6',
-        },
-        // Dark mode
-        charcoal: {
-          DEFAULT: '#121816',
-          surface: '#1B2320',
-          panel: '#222C28',
+          DEFAULT: '#4A9EFF',
+          light: 'rgba(74,158,255,0.12)',
         },
       },
       boxShadow: {
-        card: '0 2px 12px rgba(0,0,0,0.06)',
-        'card-dark': '0 2px 16px rgba(0,0,0,0.25)',
-        'glow-emerald': '0 0 20px rgba(60,154,114,0.25)',
+        card: '0 4px 24px rgba(0,0,0,0.4)',
+        'card-dark': '0 4px 32px rgba(0,0,0,0.5)',
+        'glow-green': '0 0 20px rgba(0,229,168,0.3)',
+        'glow-gold': '0 0 20px rgba(255,200,87,0.3)',
+        'glow-danger': '0 0 20px rgba(255,77,109,0.3)',
       },
       animation: {
         'fade-in': 'fadeIn 0.3s ease-out',
