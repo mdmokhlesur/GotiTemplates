@@ -1,9 +1,0 @@
-{
-  "/dashboard/page": "app/dashboard/page.js",
-  "/player-analytics/page": "app/player-analytics/page.js",
-  "/pricing/page": "app/pricing/page.js",
-  "/line-movement/page": "app/line-movement/page.js",
-  "/sportsbook-comparison/page": "app/sportsbook-comparison/page.js",
-  "/insights/page": "app/insights/page.js",
-  "/game-portfolio/page": "app/game-portfolio/page.js"
-}
