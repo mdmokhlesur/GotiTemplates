@@ -1,20 +1,50 @@
 'use client'
+import { AlertCircle } from 'lucide-react'
 import { StatTooltip } from '@/components/charts/StatTooltip'
 import { PremiumLock } from '@/components/charts/PremiumLock'
 
 interface DefensiveIntelCardProps {
-  data: any
+  data: {
+    defVsPosition: string
+    paintPointsAllowed: number
+    matchupScore: string
+    opponentDefRating: number
+    opponent: string
+    // New fields for specific text
+    matchupText?: string 
+    isFavorable?: boolean
+  }
 }
 
 export function DefensiveIntelCard({ data }: DefensiveIntelCardProps) {
+  // Use provided text or fallback to generating one based on score
+  const isFavorable = data.isFavorable ?? (data.matchupScore === 'Favorable' || data.matchupScore === 'Highly Favorable');
+  const matchupText = data.matchupText ?? 
+    (isFavorable 
+      ? `The ${data.opponent} rank ${data.defVsPosition} against opposing players in this category. This is a highly favorable matchup.`
+      : `The ${data.opponent} rank ${data.defVsPosition} defensively. This matchup projects as difficult.`);
+
   return (
-    <div className="card rounded-xl p-5 relative overflow-hidden" style={{ minHeight: 220 }}>
-      <h3 className="font-display text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Defensive Intelligence</h3>
-      <div className="space-y-2 blur-sm pointer-events-none">
+    <div className="card rounded-xl p-5 relative overflow-hidden flex flex-col" style={{ minHeight: 220 }}>
+      <h3 className="font-display text-sm font-semibold mb-3 shrink-0" style={{ color: 'var(--text-primary)' }}>Defensive Intelligence</h3>
+      
+      {/* Active Top Area: Explicit Matchup Insight */}
+      <div className="mb-4 rounded-lg p-3 flex items-start gap-3 border" 
+        style={{ 
+          backgroundColor: isFavorable ? 'var(--emerald-light)' : 'var(--coral-light)', 
+          borderColor: isFavorable ? 'rgba(27,67,50,0.2)' : 'rgba(192,57,43,0.2)'
+        }}>
+        <AlertCircle className="h-4 w-4 shrink-0 mt-0.5" style={{ color: isFavorable ? 'var(--emerald)' : 'var(--coral)' }} />
+        <p className="text-xs font-body font-medium leading-relaxed" style={{ color: 'var(--text-primary)' }}>
+          {matchupText}
+        </p>
+      </div>
+
+      {/* Blurred Stat Area */}
+      <div className="space-y-2 blur-sm pointer-events-none mt-auto">
         {[
           { label: 'DEF vs Position', value: data.defVsPosition },
           { label: <StatTooltip stat="PITP"><span>Pts Allowed (PITP)</span></StatTooltip>, value: data.paintPointsAllowed },
-          { label: 'Matchup Score', value: data.matchupScore },
           { label: 'Opponent DEF RTG', value: data.opponentDefRating },
           { label: 'Opponent', value: data.opponent },
         ].map((item, i) => (
@@ -24,7 +54,11 @@ export function DefensiveIntelCard({ data }: DefensiveIntelCardProps) {
           </div>
         ))}
       </div>
-      <PremiumLock title="Defensive Intelligence" message="Opponent defensive matchup data and paint coverage analysis" />
+      
+      {/* Premium Lock overlaying the stats specifically, but allowing the top insight to be seen as a teaser */}
+      <div className="absolute left-0 right-0 bottom-0 top-[110px]">
+        <PremiumLock title="Advanced Matchup Stats" message="Unlock full defensive metrics and coverage data" />
+      </div>
     </div>
   )
 }
