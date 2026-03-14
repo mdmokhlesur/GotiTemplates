@@ -1,5 +1,5 @@
-import { LoginPage } from './LoginPage'
+import { Login } from './components/Login'
 
-export default function Login() {
-  return <LoginPage />
+export default function Page() {
+  return <Login />
 }

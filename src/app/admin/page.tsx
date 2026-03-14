@@ -1,6 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { AdminPage } from './AdminPage'
+import { Admin } from './components/Admin'
 
-export default function Admin() {
-  return <AppLayout><AdminPage /></AppLayout>
+export default function AdminPage() {
+  return <Admin />
 }

@@ -15,6 +15,11 @@ const mainNav = [
 const moreNav = [
   { title: 'Portfolio', href: '/game-portfolio' },
   { title: 'Insights', href: '/insights' },
+  { title: 'Briefing', href: '/morning-briefing' },
+  { title: 'Edge Engine', href: '/edge-engine' },
+  { title: 'Market Intel', href: '/market-intelligence' },
+  { title: 'Backtesting', href: '/backtesting' },
+  { title: 'Capital', href: '/capital-allocation' },
   { title: 'Pricing', href: '/pricing' },
   { title: 'Profile', href: '/profile' },
   { title: 'Admin', href: '/admin' },

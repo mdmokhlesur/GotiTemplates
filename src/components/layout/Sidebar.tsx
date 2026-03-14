@@ -5,15 +5,21 @@ import { useTheme } from 'next-themes'
 import {
   LayoutDashboard, Users, TrendingUp, BarChart3, Briefcase,
   Lightbulb, CreditCard, UserCircle, Shield, Sun, Moon,
-  ChevronLeft, ChevronRight, Lock,
+  ChevronLeft, ChevronRight, Lock, Activity, Zap, FlaskConical,
+  Coffee, PieChart,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const navItems = [
   { title: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, premium: false },
   { title: 'Player Analytics', href: '/player-analytics', icon: Users, premium: false },
+  { title: 'Morning Briefing', href: '/morning-briefing', icon: Coffee, premium: false },
+  { title: 'Edge Engine', href: '/edge-engine', icon: Zap, premium: false },
+  { title: 'Market Intelligence', href: '/market-intelligence', icon: Activity, premium: false },
   { title: 'Line Movement', href: '/line-movement', icon: TrendingUp, premium: true },
   { title: 'Sportsbook Compare', href: '/sportsbook-comparison', icon: BarChart3, premium: true },
+  { title: 'Backtesting Lab', href: '/backtesting', icon: FlaskConical, premium: true },
+  { title: 'Capital Allocation', href: '/capital-allocation', icon: PieChart, premium: true },
   { title: 'Game Portfolio', href: '/game-portfolio', icon: Briefcase, premium: false },
   { title: 'Insights', href: '/insights', icon: Lightbulb, premium: false },
   { title: 'Pricing', href: '/pricing', icon: CreditCard, premium: false },
@@ -47,13 +53,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       {/* Logo */}
       <div className={cn('flex items-center gap-3 p-4 border-b', collapsed && 'justify-center')} style={{ borderColor: 'var(--border)' }}>
         <div className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--emerald), var(--emerald-hover))' }}>
-          <span className="text-white font-bold text-sm font-body z-10">PE</span>
+          <span className="text-white font-bold text-sm font-body z-10">SMI</span>
           <div className="absolute inset-0 opacity-20" style={{ background: 'radial-gradient(circle at 30% 30%, white, transparent)' }} />
         </div>
         {!collapsed && (
           <div>
-            <span className="font-display text-base font-semibold" style={{ color: 'var(--text-primary)' }}>PropEdge</span>
-            <span className="font-display text-base font-semibold ml-1" style={{ color: 'var(--gold)' }}>Intelligence</span>
+            <span className="font-display text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Sports Market</span>
+            <span className="font-display text-sm font-semibold ml-1" style={{ color: 'var(--gold)' }}>Intelligence</span>
           </div>
         )}
       </div>

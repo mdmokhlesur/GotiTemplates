@@ -1,6 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { PricingPage } from './PricingPage'
+import { Pricing } from './components/Pricing'
 
-export default function Pricing() {
-  return <AppLayout><PricingPage /></AppLayout>
+export default function PricingPage() {
+  return <Pricing />
 }

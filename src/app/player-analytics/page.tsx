@@ -1,10 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { PlayerAnalyticsPage } from './PlayerAnalyticsPage'
+import { PlayerAnalytics } from './components/PlayerAnalytics'
 
-export default function PlayerAnalytics() {
-  return (
-    <AppLayout>
-      <PlayerAnalyticsPage />
-    </AppLayout>
-  )
+export default function PlayerAnalyticsPage() {
+  return <PlayerAnalytics />
 }

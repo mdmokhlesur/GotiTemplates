@@ -1,10 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { LineMovementPage } from './LineMovementPage'
+import { LineMovement } from './components/LineMovement'
 
-export default function LineMovement() {
-  return (
-    <AppLayout>
-      <LineMovementPage />
-    </AppLayout>
-  )
+export default function LineMovementPage() {
+  return <LineMovement />
 }

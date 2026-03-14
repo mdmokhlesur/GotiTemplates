@@ -1,6 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { AnalyticsInsightsPage } from './AnalyticsInsightsPage'
+import { AnalyticsInsights } from './components/AnalyticsInsights'
 
-export default function Insights() {
-  return <AppLayout><AnalyticsInsightsPage /></AppLayout>
+export default function InsightsPage() {
+  return <AnalyticsInsights />
 }

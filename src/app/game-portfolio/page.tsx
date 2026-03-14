@@ -1,6 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { GamePortfolioPage } from './GamePortfolioPage'
+import { GamePortfolio } from './components/GamePortfolio'
 
-export default function GamePortfolio() {
-  return <AppLayout><GamePortfolioPage /></AppLayout>
+export default function GamePortfolioPage() {
+  return <GamePortfolio />
 }

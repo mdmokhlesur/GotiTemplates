@@ -1,6 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { ProfilePage } from './ProfilePage'
+import { Profile } from './components/Profile'
 
-export default function Profile() {
-  return <AppLayout><ProfilePage /></AppLayout>
+export default function ProfilePage() {
+  return <Profile />
 }

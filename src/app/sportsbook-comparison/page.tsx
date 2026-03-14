@@ -1,10 +1,5 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { SportsbookComparisonPage } from './SportsbookComparisonPage'
+import { SportsbookComparison } from './components/SportsbookComparison'
 
-export default function SportsbookComparison() {
-  return (
-    <AppLayout>
-      <SportsbookComparisonPage />
-    </AppLayout>
-  )
+export default function SportsbookComparisonPage() {
+  return <SportsbookComparison />
 }

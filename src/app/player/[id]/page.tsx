@@ -1,10 +1,7 @@
-import { AppLayout } from '@/components/layout/AppLayout'
-import { PlayerDetailPage } from './PlayerDetailPage'
+import { PlayerDetail } from './components/PlayerDetail'
 
-export default function PlayerDetail({ params }: { params: { id: string } }) {
+export default function Page({ params }: { params: { id: string } }) {
   return (
-    <AppLayout>
-      <PlayerDetailPage playerId={Number(params.id)} />
-    </AppLayout>
+    <PlayerDetail playerId={Number(params.id)} />
   )
 }
