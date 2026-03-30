@@ -1,7 +1,6 @@
 'use client'
 import { AlertCircle } from 'lucide-react'
 import { StatTooltip } from '@/components/charts/StatTooltip'
-import { PremiumLock } from '@/components/charts/PremiumLock'
 
 interface DefensiveIntelCardProps {
   data: {
@@ -40,8 +39,8 @@ export function DefensiveIntelCard({ data }: DefensiveIntelCardProps) {
         </p>
       </div>
 
-      {/* Blurred Stat Area */}
-      <div className="space-y-2 blur-sm pointer-events-none mt-auto">
+      {/* Stat Area */}
+      <div className="space-y-2 mt-auto">
         {[
           { label: 'DEF vs Position', value: data.defVsPosition },
           { label: <StatTooltip stat="PITP"><span>Pts Allowed (PITP)</span></StatTooltip>, value: data.paintPointsAllowed },
@@ -55,10 +54,6 @@ export function DefensiveIntelCard({ data }: DefensiveIntelCardProps) {
         ))}
       </div>
       
-      {/* Premium Lock overlaying the stats specifically, but allowing the top insight to be seen as a teaser */}
-      <div className="absolute left-0 right-0 bottom-0 top-[110px]">
-        <PremiumLock title="Advanced Matchup Stats" message="Unlock full defensive metrics and coverage data" />
-      </div>
     </div>
   )
 }

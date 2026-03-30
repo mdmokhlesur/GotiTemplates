@@ -1,5 +1,4 @@
 'use client'
-import { PremiumLock } from '@/components/charts/PremiumLock'
 
 interface SimilarPlayersCardProps {
   data: any[]
@@ -9,7 +8,7 @@ export function SimilarPlayersCard({ data }: SimilarPlayersCardProps) {
   return (
     <div className="card rounded-xl p-5 relative overflow-hidden" style={{ minHeight: 200 }}>
       <h3 className="font-display text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Similar Players</h3>
-      <div className="space-y-2 blur-sm pointer-events-none">
+      <div className="space-y-2">
         <div className="grid grid-cols-5 gap-2 text-xs font-body font-semibold pb-1.5 border-b" style={{ color: 'var(--text-muted)', borderColor: 'var(--border)' }}>
           <span className="col-span-2">Player</span><span className="text-center">PTS</span><span className="text-center">HR%</span><span className="text-center">Sim</span>
         </div>
@@ -22,7 +21,6 @@ export function SimilarPlayersCard({ data }: SimilarPlayersCardProps) {
           </div>
         ))}
       </div>
-      <PremiumLock title="Similar Players" message="Compare player profiles and hit rates across the league" />
     </div>
   )
 }
