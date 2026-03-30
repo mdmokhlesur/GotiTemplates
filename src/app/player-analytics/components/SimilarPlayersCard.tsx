@@ -2,9 +2,10 @@
 
 interface SimilarPlayersCardProps {
   data: any[]
+  onSelectPlayer?: (playerName: string) => void
 }
 
-export function SimilarPlayersCard({ data }: SimilarPlayersCardProps) {
+export function SimilarPlayersCard({ data, onSelectPlayer }: SimilarPlayersCardProps) {
   return (
     <div className="card rounded-xl p-5 relative overflow-hidden" style={{ minHeight: 200 }}>
       <h3 className="font-display text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Similar Players</h3>
@@ -13,12 +14,17 @@ export function SimilarPlayersCard({ data }: SimilarPlayersCardProps) {
           <span className="col-span-2">Player</span><span className="text-center">PTS</span><span className="text-center">HR%</span><span className="text-center">Sim</span>
         </div>
         {data.map((p, i) => (
-          <div key={i} className="grid grid-cols-5 gap-2 text-xs font-body py-1.5 border-b" style={{ borderColor: 'var(--border)' }}>
+          <button
+            key={i}
+            onClick={() => onSelectPlayer && onSelectPlayer(p.name)}
+            className="grid grid-cols-5 gap-2 text-xs font-body py-1.5 border-b w-full text-left hover:bg-white/5 transition-colors cursor-pointer"
+            style={{ borderColor: 'var(--border)' }}
+          >
             <span className="col-span-2 font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{p.name}</span>
             <span className="text-center" style={{ color: 'var(--text-secondary)' }}>{p.pts}</span>
             <span className="text-center text-profit">62%</span>
             <span className="text-center font-bold" style={{ color: 'var(--intel-blue)' }}>{p.similarity}%</span>
-          </div>
+          </button>
         ))}
       </div>
     </div>

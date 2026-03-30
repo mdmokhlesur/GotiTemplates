@@ -5,6 +5,7 @@ import { MarketTimingSignals } from './MarketTimingSignals'
 import { VolatilityHeatmap } from './VolatilityHeatmap'
 import { CapitalMomentumChartCard } from './CapitalMomentumChartCard'
 import { MarketActivityPulse } from './MarketActivityPulse'
+import { MarketTrapDetector } from './MarketTrapDetector'
 
 export function MarketIntelligence() {
   return (
@@ -17,11 +18,11 @@ export function MarketIntelligence() {
               <Activity className="h-4 w-4 text-white" />
             </div>
             <h1 className="font-display text-2xl md:text-3xl font-semibold" style={{ color: 'var(--text-primary)' }}>
-              Market Intelligence
+              Market Trap Detector
             </h1>
           </div>
           <p className="text-sm font-body" style={{ color: 'var(--text-muted)' }}>
-            Volatility heatmap • Capital momentum • Market timing signals
+            Volatility heatmap • Capital momentum • Trap detection
           </p>
         </div>
         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-body font-semibold" style={{ backgroundColor: 'var(--emerald-light)', color: 'var(--emerald)' }}>
@@ -29,6 +30,9 @@ export function MarketIntelligence() {
           LIVE
         </div>
       </div>
+
+      {/* Feature #10: Market Trap Detector */}
+      <MarketTrapDetector />
 
       <MarketTimingSignals signals={marketTimingSignals} />
 
@@ -41,3 +45,4 @@ export function MarketIntelligence() {
     </div>
   )
 }
+

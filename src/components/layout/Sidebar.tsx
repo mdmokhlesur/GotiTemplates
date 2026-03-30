@@ -5,85 +5,43 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setActiveSport } from "@/redux/features/sportSlice";
 import {
   LayoutDashboard,
+  Target,
+  Trophy,
+  Layers,
   Users,
-  TrendingUp,
-  BarChart3,
-  Briefcase,
-  Lightbulb,
-  CreditCard,
+  Radio,
+  Activity,
+  Timer,
+  Gamepad2,
   UserCircle,
   Shield,
-  Sun,
-  Moon,
   ChevronLeft,
   ChevronRight,
-  Lock,
-  Activity,
-  Zap,
-  FlaskConical,
-  Coffee,
-  PieChart,
+  HeartPulse,
+  Link2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   {
-    title: "Dashboard",
+    title: "Daily Betting Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
-    premium: false,
   },
+  { title: "Prop Category Filters", href: "/prop-explorer", icon: Target },
+  { title: "Top Plays / Best Bets", href: "/top-plays", icon: Trophy },
+  { title: "Parlay Builder", href: "/parlay-builder", icon: Layers },
+  { title: "Player analytics", href: "/player-analytics", icon: Users },
+  { title: "Injury Impact", href: "/injury-impact", icon: HeartPulse },
+  { title: "Correlation Engine", href: "/correlation-engine", icon: Link2 },
+  { title: "Edge Feed", href: "/edge-feed", icon: Radio },
   {
-    title: "Player Analytics",
-    href: "/player-analytics",
-    icon: Users,
-    premium: false,
-  },
-  {
-    title: "Morning Briefing",
-    href: "/morning-briefing",
-    icon: Coffee,
-    premium: false,
-  },
-  { title: "Edge Engine", href: "/edge-engine", icon: Zap, premium: false },
-  {
-    title: "Market Intelligence",
+    title: "Market Trap Detector",
     href: "/market-intelligence",
     icon: Activity,
-    premium: false,
   },
-  {
-    title: "Line Movement",
-    href: "/line-movement",
-    icon: TrendingUp,
-    premium: false,
-  },
-  {
-    title: "Sportsbook Compare",
-    href: "/sportsbook-comparison",
-    icon: BarChart3,
-    premium: false,
-  },
-  {
-    title: "Backtesting Lab",
-    href: "/backtesting",
-    icon: FlaskConical,
-    premium: false,
-  },
-  {
-    title: "Capital Allocation",
-    href: "/capital-allocation",
-    icon: PieChart,
-    premium: false,
-  },
-  {
-    title: "Game Portfolio",
-    href: "/game-portfolio",
-    icon: Briefcase,
-    premium: false,
-  },
-  { title: "Insights", href: "/insights", icon: Lightbulb, premium: false },
-  { title: "Pricing", href: "/pricing", icon: CreditCard, premium: false },
+  { title: "CLV Tracker", href: "/clv-tracker", icon: Timer },
+  { title: "DFS Integration", href: "/dfs", icon: Gamepad2 },
 ];
 
 const bottomItems = [
@@ -133,7 +91,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           }}
         >
           <span className="text-white font-bold text-sm font-body z-10">
-            SMI
+            PE
           </span>
           <div
             className="absolute inset-0 opacity-20"
@@ -149,7 +107,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               className="font-display text-sm font-semibold"
               style={{ color: "var(--text-primary)" }}
             >
-              Sports Market
+              PropEdge
             </span>
             <span
               className="font-display text-sm font-semibold ml-1"
@@ -233,12 +191,6 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                   <span className="text-sm font-body truncate flex-1">
                     {item.title}
                   </span>
-                )}
-                {!collapsed && item.premium && (
-                  <Lock
-                    className="h-3 w-3 shrink-0"
-                    style={{ color: "var(--gold)" }}
-                  />
                 )}
               </Link>
             );

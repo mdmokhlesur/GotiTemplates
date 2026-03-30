@@ -1,14 +1,15 @@
 'use client'
 import { useState } from 'react'
 import { StatTooltip } from '@/components/charts/StatTooltip'
-import { players, gameLog, hitRateBarData, playerProps, similarPlayers, defensiveIntel } from '@/data/mockData'
+import { players, gameLog, hitRateBarData, playerProps, similarPlayers } from '@/data/mockData'
+import { nbaMatchups } from '@/data/nba'
 import { Search, ChevronDown } from 'lucide-react'
 import { HitRateChart } from './HitRateChart'
 import { PlayerProfileCard } from './PlayerProfileCard'
 import { PlayerPropLines } from './PlayerPropLines'
 import { SimilarPlayersCard } from './SimilarPlayersCard'
 import { GameLogTable } from './GameLogTable'
-import { DefensiveIntelCard } from './DefensiveIntelCard'
+import { MatchupImpactCard } from './MatchupImpactCard'
 
 const statFilters = ['Points', 'Assists', 'Rebounds', 'Threes', 'Pts+Ast', 'Pts+Reb']
 
@@ -33,13 +34,26 @@ export function PlayerAnalytics() {
   const hitCount = hitRateBarData.filter(d => d.hit).length
   const hitRate = Math.round((hitCount / hitRateBarData.length) * 100)
 
+  // Get matchup for the selected player's opponent
+  const matchupTeams = Object.keys(nbaMatchups)
+  const currentMatchup = nbaMatchups[matchupTeams[Math.floor(Math.random() * matchupTeams.length)]] || nbaMatchups['BOS']
+
+  const handleSelectSimilar = (playerName: string) => {
+    const found = players.find(p => p.name === playerName);
+    if (found) {
+      setSelectedPlayer(found);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+
   return (
     <div className="p-4 md:p-6 space-y-5 max-w-[1440px] mx-auto">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="font-display text-2xl md:text-3xl font-semibold" style={{ color: 'var(--text-primary)' }}>Player Analytics</h1>
-          <p className="text-sm font-body mt-0.5" style={{ color: 'var(--text-muted)' }}>Prop research & historical performance</p>
+          <p className="text-sm font-body mt-0.5" style={{ color: 'var(--text-muted)' }}>Analyze player performance, hit rates, and recent matchups.</p>
         </div>
       </div>
 
@@ -160,12 +174,16 @@ export function PlayerAnalytics() {
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="space-y-4">
+        {/* Sidebar Column */}
+        <div className="space-y-4 lg:col-span-1">
           <PlayerProfileCard player={selectedPlayer} />
           <PlayerPropLines props={playerProps.filter(p => p.player === selectedPlayer.name || playerProps.indexOf(p) < 3).slice(0, 4)} />
+          <MatchupImpactCard matchup={currentMatchup} playerName={selectedPlayer.name} />
+          <SimilarPlayersCard data={similarPlayers} onSelectPlayer={handleSelectSimilar} />
         </div>
 
-        <div className="space-y-4">
+        {/* Main Content Column */}
+        <div className="space-y-4 lg:col-span-2">
           <HitRateChart 
             data={hitRateBarData} 
             displayLine={displayLine} 
@@ -174,12 +192,7 @@ export function PlayerAnalytics() {
             hitRate={hitRate} 
             hitCount={hitCount} 
           />
-          <SimilarPlayersCard data={similarPlayers} />
-        </div>
-
-        <div className="space-y-4">
           <GameLogTable data={gameLog} />
-          <DefensiveIntelCard data={defensiveIntel} />
         </div>
       </div>
     </div>
