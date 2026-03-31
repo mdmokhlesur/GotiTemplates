@@ -8,9 +8,7 @@ const FEED_TYPES = [
   { key: 'all', label: 'All Signals', icon: Radio },
   { key: 'high_ev', label: 'High EV', icon: Zap },
   { key: 'steam_move', label: 'Steam Moves', icon: Flame },
-  { key: 'public_trap', label: 'Public Traps', icon: AlertTriangle },
-  { key: 'sharp_money', label: 'Sharp Money', icon: TrendingUp },
-  { key: 'trending_prop', label: 'Trending', icon: Eye },
+  { key: 'line_movement', label: 'Line Move', icon: TrendingUp },
   { key: 'injury', label: 'Injury', icon: ArrowRightLeft },
 ] as const
 
@@ -19,9 +17,7 @@ type FeedTypeKey = typeof FEED_TYPES[number]['key']
 const typeConfig: Record<EdgeFeedItem['type'], { color: string; bg: string; label: string; icon: string }> = {
   high_ev: { color: 'var(--emerald)', bg: 'var(--emerald-light)', label: 'HIGH EV', icon: '🟢' },
   steam_move: { color: 'var(--coral)', bg: 'var(--coral-light)', label: 'STEAM MOVE', icon: '🔴' },
-  public_trap: { color: 'var(--gold)', bg: 'var(--gold-light)', label: 'PUBLIC TRAP', icon: '🟡' },
-  sharp_money: { color: 'var(--intel-blue)', bg: 'var(--intel-blue-light)', label: 'SHARP MONEY', icon: '🔵' },
-  trending_prop: { color: 'var(--text-secondary)', bg: 'var(--bg-surface)', label: 'TRENDING', icon: '⚪' },
+  line_movement: { color: 'var(--intel-blue)', bg: 'var(--intel-blue-light)', label: 'LINE MOVE', icon: '🔵' },
   injury: { color: '#F97316', bg: 'rgba(249,115,22,0.12)', label: 'INJURY', icon: '🟠' },
 }
 
@@ -80,7 +76,7 @@ export function EdgeFeed() {
       </div>
 
       {/* Signal Count Strip */}
-      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         {Object.entries(typeConfig).map(([type, cfg]) => (
           <div key={type} className="card rounded-xl p-3 text-center cursor-pointer transition-all hover:opacity-80" onClick={() => setActiveType(type as FeedTypeKey)}>
             <p className="text-lg mb-0.5">{cfg.icon}</p>

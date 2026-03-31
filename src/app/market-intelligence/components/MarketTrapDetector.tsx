@@ -1,113 +1,98 @@
 'use client'
-import { AlertTriangle, ArrowDown, ArrowUp, Users, TrendingUp } from 'lucide-react'
+import { TrendingUp, ArrowRightLeft, Activity } from 'lucide-react'
 
-const trapData = [
+// Since SportsData API does NOT provide "Public Ticket %" or "Sharp Money", 
+// we pivot this component to detect purely objective Line Movements / Steam.
+const lineMoveData = [
   {
     game: 'LAL vs BOS',
-    publicSide: 'Lakers ML',
-    publicPct: 82,
-    lineDirection: 'Moving toward Celtics',
-    lineMove: '-3 → -4.5',
-    signal: 'reverse',
-    description: 'Heavy public money on LAL but line moving against them. Classic trap pattern.',
-  },
-  {
-    game: 'MIL vs IND',
-    publicSide: 'Bucks ML',
-    publicPct: 76,
-    lineDirection: 'Drifting toward Pacers',
-    lineMove: '-180 → -165',
-    signal: 'reverse',
-    description: 'Public hammering MIL after Giannis 40-point game. Sharp books fading the public.',
-  },
-  {
-    game: 'GSW vs DEN',
-    publicSide: 'Over 231',
-    publicPct: 88,
-    lineDirection: 'Total holding steady',
-    lineMove: '231 → 231',
-    signal: 'hold',
-    description: 'Extreme public betting on Over but total not moving. Books comfortable with liability.',
+    prop: 'LeBron PTS O29.5',
+    openingOdds: '-110',
+    currentOdds: '-135',
+    signal: 'steam',
+    direction: 'up',
+    description: 'Heavy odds movement from -110 to -135 in the last hour. Aggressive action pushing the price.',
   },
   {
     game: 'PHX vs MIA',
-    publicSide: 'Suns -2.5',
-    publicPct: 71,
-    lineDirection: 'Moving toward Heat',
-    lineMove: '-2.5 → -1.5',
-    signal: 'reverse',
-    description: 'Public on PHX but line dropping. Jimmy Butler ruled out but sharp action on MIA.',
+    prop: 'Suns Spread',
+    openingOdds: '-2.5',
+    currentOdds: '-4.0',
+    signal: 'drift',
+    direction: 'up',
+    description: 'Spread drifted 1.5 points. Movement aligns with our model projection showing a 5.6 point Phoenix edge.',
+  },
+  {
+    game: 'MIL vs IND',
+    prop: 'Giannis REB O11.5',
+    openingOdds: '-115',
+    currentOdds: '+105',
+    signal: 'fade',
+    direction: 'down',
+    description: 'Odds flipped to plus money. Expectation of fewer minutes or reduced usage making the Over less likely.',
+  },
+  {
+    game: 'GSW vs DEN',
+    prop: 'Curry 3PM O4.5',
+    openingOdds: '+120',
+    currentOdds: '+120',
+    signal: 'hold',
+    direction: 'flat',
+    description: 'Odds holding entirely stable at +120 despite high game total. Sportsbooks are perfectly balancing risk.',
   },
 ]
 
 export function MarketTrapDetector() {
-  const trapCount = trapData.filter(t => t.signal === 'reverse').length
+  const steamCount = lineMoveData.filter(m => m.signal === 'steam').length
 
   return (
     <div className="card rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <AlertTriangle className="h-4 w-4" style={{ color: 'var(--coral)' }} />
+          <Activity className="h-4 w-4" style={{ color: 'var(--intel-blue)' }} />
           <h3 className="font-display text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-            Market Trap Detector
+            True Line Movement Engine
           </h3>
-          <span className="badge text-[9px]" style={{ backgroundColor: 'var(--coral-light)', color: 'var(--coral)' }}>
-            {trapCount} TRAP{trapCount !== 1 ? 'S' : ''}
+          <span className="badge text-[9px]" style={{ backgroundColor: 'var(--intel-blue-light)', color: 'var(--intel-blue)' }}>
+            {steamCount} STEAM MOVE{steamCount !== 1 ? 'S' : ''}
           </span>
         </div>
       </div>
 
       <p className="text-[11px] font-body mb-4" style={{ color: 'var(--text-muted)' }}>
-        Identifies reverse line movement — when public betting conflicts with line direction
+        Tracks objective line shifting (Opening Odds vs Current Odds) without false "public ticket" narratives.
       </p>
 
       <div className="space-y-3">
-        {trapData.map((trap, i) => (
-          <div key={i} className="rounded-lg p-3" style={{ backgroundColor: 'var(--bg-surface)', border: `1px solid ${trap.signal === 'reverse' ? 'rgba(255,77,109,0.2)' : 'var(--border)'}` }}>
-            {/* Game & Signal */}
+        {lineMoveData.map((move, i) => (
+          <div key={i} className="rounded-lg p-3" style={{ backgroundColor: 'var(--bg-surface)', border: `1px solid ${move.signal === 'steam' ? 'rgba(59,130,246,0.3)' : 'var(--border)'}` }}>
+            {/* Game & Prop */}
             <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-body font-semibold" style={{ color: 'var(--text-primary)' }}>{trap.game}</span>
+              <div>
+                <span className="text-xs font-body font-semibold mr-2" style={{ color: 'var(--text-primary)' }}>{move.game}</span>
+                <span className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>{move.prop}</span>
+              </div>
               <span className="badge text-[9px]" style={{
-                backgroundColor: trap.signal === 'reverse' ? 'var(--coral-light)' : 'var(--gold-light)',
-                color: trap.signal === 'reverse' ? 'var(--coral)' : 'var(--gold)',
+                backgroundColor: move.signal === 'steam' ? 'var(--intel-blue-light)' : 'var(--bg-card)',
+                color: move.signal === 'steam' ? 'var(--intel-blue)' : 'var(--text-secondary)',
               }}>
-                {trap.signal === 'reverse' ? '⚠ REVERSE LINE' : '⏸ LINE HOLD'}
+                {move.signal === 'steam' ? '🔥 HEAVY STEAM' : move.signal === 'fade' ? '📉 FADE' : '⏸ HOLD'}
               </span>
             </div>
 
-            {/* Public % vs Line Direction */}
+            {/* Line Movement Odds */}
             <div className="flex items-center gap-4 mb-2">
-              {/* Public Side */}
               <div className="flex items-center gap-2 flex-1">
-                <Users className="h-3.5 w-3.5" style={{ color: 'var(--intel-blue)' }} />
-                <div className="flex-1">
-                  <div className="flex items-center justify-between mb-0.5">
-                    <span className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Public: {trap.publicSide}</span>
-                    <span className="text-xs font-body font-bold" style={{ color: 'var(--intel-blue)' }}>{trap.publicPct}%</span>
-                  </div>
-                  <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--bg-card)' }}>
-                    <div className="h-full rounded-full" style={{ width: `${trap.publicPct}%`, backgroundColor: 'var(--intel-blue)' }} />
-                  </div>
+                <TrendingUp className="h-3.5 w-3.5" style={{ color: 'var(--emerald)' }} />
+                <div className="flex-1 flex gap-2 items-center">
+                  <span className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Open: {move.openingOdds}</span>
+                  <ArrowRightLeft className="h-3 w-3 opacity-50" />
+                  <span className="text-xs font-body font-bold" style={{ color: 'var(--emerald)' }}>Current: {move.currentOdds}</span>
                 </div>
-              </div>
-
-              {/* Direction */}
-              <div className="flex items-center gap-1">
-                {trap.signal === 'reverse' ? (
-                  <ArrowDown className="h-4 w-4" style={{ color: 'var(--coral)' }} />
-                ) : (
-                  <TrendingUp className="h-4 w-4 opacity-40" style={{ color: 'var(--text-muted)' }} />
-                )}
-              </div>
-
-              {/* Line Move */}
-              <div className="text-right">
-                <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Line: {trap.lineMove}</p>
-                <p className="text-[10px] font-body font-semibold" style={{ color: trap.signal === 'reverse' ? 'var(--coral)' : 'var(--gold)' }}>{trap.lineDirection}</p>
               </div>
             </div>
 
-            <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>{trap.description}</p>
+            <p className="text-[10px] font-body mt-1" style={{ color: 'var(--text-muted)' }}>{move.description}</p>
           </div>
         ))}
       </div>
