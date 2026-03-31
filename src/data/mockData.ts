@@ -2,6 +2,7 @@ import type { OddsGame, Player, GameLog, PlayerProp, KPI, AdminUser, LinePoint }
 
 // ============================================================
 // ODDS API MOCK DATA — mirrors exact API response structure
+// Source: Sportsdata.io NBA Pre-Game Odds API
 // When backend is ready, replace these with API calls
 // ============================================================
 
@@ -118,6 +119,7 @@ export const propOfTheDay = {
 
 // ============================================================
 // PLAYERS
+// Source: Sportsdata.io NBA Players API
 // ============================================================
 export const players: Player[] = [
   { id: 1, name: 'LeBron James', team: 'LAL', position: 'SF', number: 23, photo: 'https://cdn.nba.com/headshots/nba/latest/1040x760/2544.png', status: 'Active' },
@@ -132,6 +134,7 @@ export const players: Player[] = [
 
 // ============================================================
 // GAME LOG
+// Source: Sportsdata.io NBA Player Game Logs API
 // ============================================================
 export const gameLog: GameLog[] = [
   { game: 'vs BOS', date: 'Mar 10', pts: 32, ast: 9, reb: 7, threes: 3, min: 36, usg: 32.4, fga: 22, cl: 29.5 },
@@ -157,6 +160,7 @@ export const hitRateBarData = gameLog.map((g) => ({
 
 // ============================================================
 // PLAYER PROPS
+// Source: Sportsdata.io NBA Player Prop Projections API
 // ============================================================
 export const playerProps: PlayerProp[] = [
   { player: 'LeBron James', team: 'LAL', prop: 'Over 29.5 Points', line: 29.5, stat: 'PTS', odds: '-120', projection: 32.1, confidence: 78, hitRate: 70, hitFraction: '14/20', positive: true },
@@ -403,6 +407,7 @@ export const similarPlayers = [
 ]
 
 // Defensive Intelligence Data
+// Source: Sportsdata.io NBA Team Statistics API
 export const defensiveIntel = {
   defVsPosition: '5th',
   allowedPts: 24.8,
@@ -484,6 +489,7 @@ export const morningBriefingCards = [
 ]
 
 export const morningInjuryAlerts = [
+  // Source: Sportsdata.io NBA Injuries API
   { player: 'Luka Doncic', team: 'DAL', status: 'Questionable', injury: 'Knee', impact: 'High', affectedProps: ['AST Over 8.5', 'PTS Over 28.5', 'DAL Spread'] },
   { player: 'Jimmy Butler', team: 'MIA', status: 'Probable', injury: 'Ankle', impact: 'Low', affectedProps: ['MIA ML', 'PTS Over 21.5'] },
   { player: 'Anthony Davis', team: 'LAL', status: 'Active', injury: null, impact: 'None', affectedProps: [] },
