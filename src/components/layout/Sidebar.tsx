@@ -76,9 +76,10 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   };
 
   const getHrefWithParams = (href: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (activeSport) {
-      params.set("sport", activeSport.toLowerCase());
+    const params = new URLSearchParams();
+    const currentSport = searchParams.get("sport") || activeSport;
+    if (currentSport) {
+      params.set("sport", currentSport.toLowerCase());
     }
     return `${href}?${params.toString()}`;
   };

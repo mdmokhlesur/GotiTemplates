@@ -15,9 +15,9 @@ export function HitRateChart({ data, displayLine, viewMode, selectedStat, hitRat
     <div className="card rounded-xl p-5">
       <div className="flex items-center justify-between mb-2">
         <div>
-          <h3 className="font-display text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Hit Rate — Last 12 Games</h3>
+          <h3 className="font-display text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>Hit Rate — Last {data.length} Games</h3>
           <p className="text-xs font-body mt-0.5" style={{ color: 'var(--text-muted)' }}>
-            {selectedStat} vs 29.5 line · <span style={{ color: hitRate >= 50 ? 'var(--emerald)' : 'var(--coral)' }}>{hitRate}% ({hitCount}/{data.length})</span>
+            {selectedStat} vs {displayLine.toFixed(1)} line · <span style={{ color: hitRate >= 50 ? 'var(--emerald)' : 'var(--coral)' }}>{hitRate}% ({hitCount}/{data.length})</span>
           </p>
         </div>
         <div className="flex gap-2 text-xs font-body">

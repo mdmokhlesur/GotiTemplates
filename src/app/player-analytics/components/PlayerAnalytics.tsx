@@ -1,9 +1,10 @@
 'use client'
 import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { StatTooltip } from '@/components/charts/StatTooltip'
-import { players, gameLog, hitRateBarData, playerProps, similarPlayers } from '@/data/mockData'
+import { similarPlayers } from '@/data/mockData'
 import { nbaMatchups } from '@/data/nba'
-import { Search, ChevronDown } from 'lucide-react'
+import { Search, ChevronDown, Activity } from 'lucide-react'
 import { HitRateChart } from './HitRateChart'
 import { PlayerProfileCard } from './PlayerProfileCard'
 import { PlayerPropLines } from './PlayerPropLines'
@@ -13,39 +14,114 @@ import { MatchupImpactCard } from './MatchupImpactCard'
 
 const statFilters = ['Points', 'Assists', 'Rebounds', 'Threes', 'Pts+Ast', 'Pts+Reb']
 
-export function PlayerAnalytics() {
-  const [selectedPlayer, setSelectedPlayer] = useState(players[0])
+export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { playerLog: any, seasonStats: any, allActivePlayer: any }) {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const rawPlayers = allActivePlayer || []
+  const playersList = Array.isArray(rawPlayers) ? rawPlayers : (rawPlayers.data && Array.isArray(rawPlayers.data) ? rawPlayers.data : [])
+  const playerIdParam = searchParams.get('playerId')
+  const selectedPlayer = playersList?.find((p: any) => p.PlayerID?.toString() === playerIdParam) || playersList[0] || null
+
   const [selectedStat, setSelectedStat] = useState('Points')
   const [viewMode, setViewMode] = useState<'avg' | 'median'>('avg')
   const [searchQuery, setSearchQuery] = useState('')
-  const [h2hFilter, setH2hFilter] = useState(false)
-  const [b2bFilter, setB2bFilter] = useState(false)
   const [showPlayerDropdown, setShowPlayerDropdown] = useState(false)
 
-  const filteredPlayers = players.filter(p =>
-    p.name.toLowerCase().includes(searchQuery.toLowerCase())
+  if (!playersList.length) {
+    return (
+      <div className="flex flex-col items-center justify-center p-10 text-center" style={{ color: 'var(--text-muted)' }}>
+        <Activity className="h-12 w-12 mb-3 opacity-20" />
+        <h2 className="text-xl font-display font-semibold" style={{ color: 'var(--text-primary)' }}>No Players Found</h2>
+        <p className="max-w-xs text-sm font-body mx-auto mt-2">We couldn't find any active players for the selected sport. Please check your filters or try again later.</p>
+      </div>
+    )
+  }
+
+  // Fallback if players exist but no default/selected player (unlikely but safe)
+  if (!selectedPlayer) return null
+
+  const filteredPlayers = playersList?.filter((p: any) =>
+    (`${p.FirstName} ${p.LastName}`).toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  const avgPts = gameLog.reduce((sum, g) => sum + g.pts, 0) / gameLog.length
-  const sortedPts = [...gameLog].sort((a, b) => a.pts - b.pts)
-  const medianPts = sortedPts[Math.floor(sortedPts.length / 2)].pts
-  const displayLine = viewMode === 'avg' ? avgPts : medianPts
+  const getStatValue = (game: any, statName: string) => {
+    switch (statName) {
+      case 'Points': return game.Points || 0
+      case 'Assists': return game.Assists || 0
+      case 'Rebounds': return game.Rebounds || 0
+      case 'Threes': return game.ThreePointersMade || 0
+      case 'Pts+Ast': return (game.Points || 0) + (game.Assists || 0)
+      case 'Pts+Reb': return (game.Points || 0) + (game.Rebounds || 0)
+      default: return game.Points || 0
+    }
+  }
 
-  const hitCount = hitRateBarData.filter(d => d.hit).length
-  const hitRate = Math.round((hitCount / hitRateBarData.length) * 100)
+  const activeLogs = playerLog || []
+  const statValues = Array.isArray(activeLogs) ? activeLogs.map((g: any) => getStatValue(g, selectedStat)) : []
+  const avgStat = statValues.length ? statValues.reduce((a: number, b: number) => a + b, 0) / statValues.length : 0
+  const sortedStats = [...statValues].sort((a, b) => a - b)
+  const medianStat = sortedStats.length ? sortedStats[Math.floor(sortedStats.length / 2)] : 0
+  const displayLine = viewMode === 'avg' ? avgStat : medianStat
+
+  const hitCount = statValues.filter((v: number) => v >= displayLine).length
+  const hitRate = statValues.length ? Math.round((hitCount / statValues.length) * 100) : 0
+
+  const computedHitRateBarData = Array.isArray(activeLogs) ? activeLogs.map((g: any) => {
+    const val = getStatValue(g, selectedStat)
+    return {
+      label: g.Day ? new Date(g.Day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "--",
+      value: val,
+      line: displayLine,
+      hit: val >= displayLine
+    }
+  }).reverse() : []
 
   // Get matchup for the selected player's opponent
   const matchupTeams = Object.keys(nbaMatchups)
-  const currentMatchup = nbaMatchups[matchupTeams[Math.floor(Math.random() * matchupTeams.length)]] || nbaMatchups['BOS']
+  const matchupIndex = selectedPlayer?.PlayerID ? (selectedPlayer.PlayerID % matchupTeams.length) : 0
+  const currentMatchup = nbaMatchups[matchupTeams[matchupIndex]] || nbaMatchups['BOS']
 
   const handleSelectSimilar = (playerName: string) => {
-    const found = players.find(p => p.name === playerName);
+    const found = playersList?.find((p: any) => `${p.FirstName} ${p.LastName}` === playerName);
     if (found) {
-      setSelectedPlayer(found);
+      handlePlayerSelect(found);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
+  const handlePlayerSelect = (p: any) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('playerId', p.PlayerID.toString())
+    router.push(`?${params.toString()}`)
+    setShowPlayerDropdown(false)
+    setSearchQuery('')
+  }
+
+  // Calculate Dynamic Prop Lines for Points, Rebounds, Threes
+  const getPropMetrics = (statName: string) => {
+    const vals = activeLogs.map((g: any) => getStatValue(g, statName))
+    const avg = vals.length ? vals.reduce((a: number, b: number) => a + b, 0) / vals.length : 0
+    const hrCount = vals.filter((v: number) => v >= avg).length
+    const hr = vals.length ? Math.round((hrCount / vals.length) * 100) : 0
+
+    // Simple Confidence: Compare last 3 games vs. overall average
+    const last3 = vals.slice(0, 3)
+    const last3Avg = last3.length ? last3.reduce((a: number, b: number) => a + b, 0) / last3.length : 0
+    const trend = avg > 0 ? (last3Avg / avg) : 1
+    const confidence = Math.min(Math.max(Math.round(trend * 75 + (hr / 10)), 30), 98)
+
+    return {
+      prop: `${statName}`,
+      projection: avg.toFixed(1),
+      confidence,
+      hitRate: hr,
+      positive: trend >= 1,
+      odds: trend >= 1 ? '-115' : '+105'
+    }
+  }
+
+  const dynamicProps = ['Points', 'Rebounds', 'Threes'].map(getPropMetrics)
 
   return (
     <div className="p-4 md:p-6 space-y-5 max-w-[1440px] mx-auto">
@@ -67,7 +143,7 @@ export function PlayerAnalytics() {
             onClick={() => setShowPlayerDropdown(!showPlayerDropdown)}
           >
             <Search className="h-3.5 w-3.5" style={{ color: 'var(--text-muted)' }} />
-            {selectedPlayer.name}
+            {selectedPlayer.FirstName} {selectedPlayer.LastName}
             <ChevronDown className="h-3.5 w-3.5 ml-1" style={{ color: 'var(--text-muted)' }} />
           </button>
           {showPlayerDropdown && (
@@ -84,26 +160,28 @@ export function PlayerAnalytics() {
                 />
               </div>
               <div className="max-h-52 overflow-y-auto py-1">
-                {filteredPlayers.map(p => (
+                {filteredPlayers?.length > 0 ? filteredPlayers?.map((p: any) => (
                   <button
-                    key={p.id}
+                    key={p.PlayerID}
                     className="w-full flex items-center gap-3 px-3 py-2 text-left hover:opacity-80 transition-colors"
-                    style={{ backgroundColor: selectedPlayer.id === p.id ? 'var(--emerald-light)' : 'transparent', color: selectedPlayer.id === p.id ? 'var(--emerald)' : 'var(--text-primary)' }}
-                    onClick={() => { setSelectedPlayer(p); setShowPlayerDropdown(false); setSearchQuery('') }}
+                    style={{ backgroundColor: selectedPlayer?.PlayerID === p.PlayerID ? 'var(--emerald-light)' : 'transparent', color: selectedPlayer?.PlayerID === p.PlayerID ? 'var(--emerald)' : 'var(--text-primary)' }}
+                    onClick={() => handlePlayerSelect(p)}
                   >
                     <span className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold font-body shrink-0" style={{ backgroundColor: 'var(--bg-surface)' }}>
-                      #{p.number}
+                      #{p.Jersey}
                     </span>
                     <div>
-                      <p className="text-sm font-body font-semibold">{p.name}</p>
-                      <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>{p.team} · {p.position}</p>
+                      <p className="text-sm font-body font-semibold">{p.FirstName} {p.LastName}</p>
+                      <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>{p.Team} · {p.Position}</p>
                     </div>
-                    <span className={`ml-auto text-[10px] badge ${p.status === 'Active' ? 'bg-emerald/20 text-profit' : p.status === 'Questionable' ? '' : 'bg-coral/20 text-loss'}`}
-                      style={p.status === 'Questionable' ? { backgroundColor: 'var(--gold-light)', color: 'var(--gold)' } : {}}>
-                      {p.status}
+                    <span className={`ml-auto text-[10px] badge ${p.Status === 'Active' ? 'bg-emerald/20 text-profit' : p.Status === 'Questionable' ? '' : 'bg-coral/20 text-loss'}`}
+                      style={p.Status === 'Questionable' ? { backgroundColor: 'var(--gold-light)', color: 'var(--gold)' } : {}}>
+                      {p.Status}
                     </span>
                   </button>
-                ))}
+                )) : <tr>
+                  <td colSpan={7} className="text-center py-2 px-2" style={{ color: 'var(--text-muted)' }}>No players found</td>
+                </tr>}
               </div>
             </div>
           )}
@@ -127,25 +205,27 @@ export function PlayerAnalytics() {
           ))}
         </div>
 
-        {/* Context Filters */}
+        {/* Season Filter Dropdown */}
         <div className="flex gap-1.5 ml-auto">
-          {[
-            { label: 'H2H', key: 'h2h', active: h2hFilter, set: setH2hFilter },
-            { label: 'B2B', key: 'b2b', active: b2bFilter, set: setB2bFilter },
-          ].map(f => (
-            <button
-              key={f.key}
-              onClick={() => f.set(!f.active)}
-              className="px-3 py-1.5 rounded-lg text-xs font-body font-medium transition-all"
-              style={{
-                backgroundColor: f.active ? 'var(--gold-light)' : 'var(--bg-card)',
-                color: f.active ? 'var(--gold)' : 'var(--text-secondary)',
-                border: `1px solid ${f.active ? 'var(--gold)' : 'var(--border)'}`,
-              }}
-            >
-              <StatTooltip stat={f.label}><span>{f.label}</span></StatTooltip>
-            </button>
-          ))}
+          <select
+            value={searchParams.get('season') || '2026'}
+            onChange={(e) => {
+              const params = new URLSearchParams(searchParams.toString())
+              params.set('season', e.target.value)
+              router.push(`?${params.toString()}`)
+              setSearchQuery('')
+            }}
+            className="px-3 py-1.5 rounded-lg text-xs font-body font-medium transition-all outline-none"
+            style={{
+              backgroundColor: 'var(--bg-card)',
+              color: 'var(--text-primary)',
+              border: `1px solid var(--border)`,
+            }}
+          >
+            {[new Date().getFullYear(), new Date().getFullYear() - 1, new Date().getFullYear() - 2, new Date().getFullYear() - 3]?.map((season: any) => (
+              <option key={season} value={season}>{season} Season</option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -168,7 +248,7 @@ export function PlayerAnalytics() {
           ))}
         </div>
         <span className="text-xs font-body px-2 py-1 rounded-lg" style={{ backgroundColor: 'var(--bg-surface)', color: 'var(--text-muted)' }}>
-          {viewMode === 'avg' ? 'Avg' : 'Median'}: <strong style={{ color: 'var(--text-primary)' }}>{displayLine.toFixed(1)} PTS</strong>
+          {viewMode === 'avg' ? 'Avg' : 'Median'}: <strong style={{ color: 'var(--text-primary)' }}>{displayLine.toFixed(1)} {selectedStat === 'Threes' ? '3PM' : selectedStat}</strong>
         </span>
       </div>
 
@@ -176,23 +256,24 @@ export function PlayerAnalytics() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {/* Sidebar Column */}
         <div className="space-y-4 lg:col-span-1">
-          <PlayerProfileCard player={selectedPlayer} />
-          <PlayerPropLines props={playerProps.filter(p => p.player === selectedPlayer.name || playerProps.indexOf(p) < 3).slice(0, 4)} />
-          <MatchupImpactCard matchup={currentMatchup} playerName={selectedPlayer.name} />
+          <PlayerProfileCard player={selectedPlayer} seasonStats={seasonStats} />
+          <PlayerPropLines props={dynamicProps} />
+          {/* TODO: Find the url from sportsDataIo */}
+          <MatchupImpactCard matchup={currentMatchup} playerName={`${selectedPlayer?.FirstName} ${selectedPlayer?.LastName}`} />
           <SimilarPlayersCard data={similarPlayers} onSelectPlayer={handleSelectSimilar} />
         </div>
 
         {/* Main Content Column */}
         <div className="space-y-4 lg:col-span-2">
-          <HitRateChart 
-            data={hitRateBarData} 
-            displayLine={displayLine} 
-            viewMode={viewMode} 
-            selectedStat={selectedStat} 
-            hitRate={hitRate} 
-            hitCount={hitCount} 
+          <HitRateChart
+            data={computedHitRateBarData}
+            displayLine={displayLine}
+            viewMode={viewMode}
+            selectedStat={selectedStat}
+            hitRate={hitRate}
+            hitCount={hitCount}
           />
-          <GameLogTable data={gameLog} />
+          <GameLogTable data={activeLogs} selectedStat={selectedStat} displayLine={displayLine} />
         </div>
       </div>
     </div>

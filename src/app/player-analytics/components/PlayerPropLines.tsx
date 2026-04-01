@@ -7,9 +7,9 @@ interface PlayerPropLinesProps {
 export function PlayerPropLines({ props }: PlayerPropLinesProps) {
   return (
     <div className="card rounded-xl p-5">
-      <h3 className="font-display text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Prop Lines</h3>
+      <h3 className="font-display text-sm font-semibold mb-3 uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>Hit Rate & Confidence</h3>
       <div className="space-y-2">
-        {props.map((p, i) => (
+        {props?.map((p, i) => (
           <div key={i} className="flex items-center gap-3 p-2.5 rounded-lg" style={{ backgroundColor: 'var(--bg-surface)', border: '1px solid var(--border)' }}>
             <div className="flex-1 min-w-0">
               <p className="text-xs font-body font-semibold truncate" style={{ color: 'var(--text-primary)' }}>{p.prop}</p>
