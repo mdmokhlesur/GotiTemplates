@@ -1,10 +1,10 @@
 import type { EdgeFeedItem } from "@/types";
 
 // ============================================================
-// EDGE FEED (Driven by SportsData Live Odds & Player Projections)
-// SportsData API: GET /v3/nba/odds/{format}/GameOddsByDate/{date} for line moves
-// SportsData API: GET /v3/nba/projections/{format}/PlayerGameProjectionStatsByDate/{date} for EV
+// EDGE FEED DATA
+// Source: Synthesized from Sportsdata.io NBA Live Odds API and NBA Line Movement data
 // ============================================================
+
 export const nbaEdgeFeed: EdgeFeedItem[] = [
   {
     id: "ef-1",
