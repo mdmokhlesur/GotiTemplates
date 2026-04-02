@@ -16,7 +16,7 @@ export function GameLogTable({ data, selectedStat, displayLine }: GameLogTablePr
 
   return (
     <div className="card rounded-xl p-5">
-      <h3 className="font-display text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Game Log</h3>
+      <h3 className="font-display text-sm font-semibold mb-3" style={{ color: 'var(--text-primary)' }}>Game Log — Last {data?.length || 0} Games</h3>
       <div className="overflow-x-auto">
         <table className="w-full text-xs font-body">
           <thead>
@@ -30,7 +30,7 @@ export function GameLogTable({ data, selectedStat, displayLine }: GameLogTablePr
             </tr>
           </thead>
           <tbody>
-            {data?.length > 0 ? data?.slice(0, 10).map((row: any, i: number) => (
+            {data?.length > 0 ? data?.map((row: any, i: number) => (
               <tr key={i} className="transition-colors hover:opacity-80" style={{ borderBottom: '1px solid var(--border)' }}>
                 <td className="py-2 px-2 font-semibold" style={{ color: 'var(--text-primary)' }}>{row.Opponent}</td>
                 <td className="py-2 px-2" style={{ color: 'var(--text-muted)' }}>{row.Day ? new Date(row.Day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '--'}</td>

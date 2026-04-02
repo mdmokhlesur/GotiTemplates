@@ -99,7 +99,14 @@ export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { p
   }
 
   // Calculate Dynamic Prop Lines for Points, Rebounds, Threes
-  const getPropMetrics = (statName: string) => {
+  const getPropMetrics = (statName: string): {
+    prop: string;
+    projection: string;
+    confidence: number;
+    hitRate: number;
+    positive: boolean;
+    odds: string;
+  } => {
     const vals = activeLogs.map((g: any) => getStatValue(g, statName))
     const avg = vals.length ? vals.reduce((a: number, b: number) => a + b, 0) / vals.length : 0
     const hrCount = vals.filter((v: number) => v >= avg).length
@@ -273,7 +280,7 @@ export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { p
             hitRate={hitRate}
             hitCount={hitCount}
           />
-          <GameLogTable data={activeLogs} selectedStat={selectedStat} displayLine={displayLine} />
+          <GameLogTable data={activeLogs?.slice(0, 12)} selectedStat={selectedStat} displayLine={displayLine} />
         </div>
       </div>
     </div>

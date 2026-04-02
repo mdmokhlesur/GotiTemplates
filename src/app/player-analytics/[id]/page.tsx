@@ -10,6 +10,9 @@ type Props = {
 }
 
 export default async function PlayerDetailsPage({ params, searchParams }: Props) {
+
+    console.log('params', params)
+    console.log('searchParams', searchParams)
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const sport = searchParams?.sport || 'nba'
     const season = searchParams?.season || '2026'
@@ -21,19 +24,21 @@ export default async function PlayerDetailsPage({ params, searchParams }: Props)
     query.set('sport', sport)
     query.set('playerId', playerId)
 
-    const [playerLogRes, seasonStatsRes, playersRes] = await Promise.all([
+    console.log({ GAME_LOG_URL: `${baseUrl}/players/game-logs?${query.toString()}` })
+    console.log({ SEASON_STATS_URL: `${baseUrl}/players/season-stats-by-player?${query.toString()}` })
+
+    const [playerLogRes, playersRes] = await Promise.all([
         fetch(`${baseUrl}/players/game-logs?${query.toString()}`),
-        fetch(`${baseUrl}/players/season-stats-by-player?${query.toString()}`),
         fetch(`${baseUrl}/players/active-players?sport=${sport}`)
     ])
 
     const playerLogJson = await playerLogRes.json()
-    const seasonStatsJson = await seasonStatsRes.json()
     const playersJson = await playersRes.json()
-
+    console.log({ playerLogJson: playerLogJson?.data?.length })
+    console.log({ activePlayersList: playersJson?.data?.length })
     const playersList = playersJson.data || []
-    const selectedPlayer = playersList.find((p: any) => p.PlayerID.toString() === playerId)
 
+    const selectedPlayer = playersList?.find((p: any) => p.PlayerID.toString() === playerId)
     if (!selectedPlayer) {
         redirect('/player-analytics')
     }
@@ -42,9 +47,7 @@ export default async function PlayerDetailsPage({ params, searchParams }: Props)
         <PlayerDetailView
             player={selectedPlayer}
             playerLog={playerLogJson.data || []}
-            seasonStats={seasonStatsJson.data || {}}
             season={season}
-            sport={sport}
         />
     )
 }

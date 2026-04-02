@@ -8,13 +8,12 @@ import { GameLogTable } from './GameLogTable'
 
 interface PlayerDetailViewProps {
   player: any
-  playerLog: any[]
-  seasonStats: any
+  playerLog: any
   season: string
-  sport: string
 }
 
-export function PlayerDetailView({ player, playerLog, seasonStats, season, sport }: PlayerDetailViewProps) {
+export function PlayerDetailView({ player, playerLog = [], season }: PlayerDetailViewProps) {
+  const safePlayerLog = Array.isArray(playerLog) ? playerLog : (playerLog?.data && Array.isArray(playerLog.data) ? playerLog.data : [])
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -35,7 +34,7 @@ export function PlayerDetailView({ player, playerLog, seasonStats, season, sport
     }
   }
 
-  const statValues = playerLog.map((g: any) => getStatValue(g, selectedStat))
+  const statValues = safePlayerLog.map((g: any) => getStatValue(g, selectedStat))
   const avgStat = statValues.length ? statValues.reduce((a: number, b: number) => a + b, 0) / statValues.length : 0
   const sortedStats = [...statValues].sort((a, b) => a - b)
   const medianStat = sortedStats.length ? sortedStats[Math.floor(sortedStats.length / 2)] : 0
@@ -44,7 +43,7 @@ export function PlayerDetailView({ player, playerLog, seasonStats, season, sport
   const hitCount = statValues.filter((v: number) => v >= displayLine).length
   const hitRate = statValues.length ? Math.round((hitCount / statValues.length) * 100) : 0
 
-  const computedHitRateBarData = playerLog.map((g: any) => {
+  const computedHitRateBarData = safePlayerLog.map((g: any) => {
     const val = getStatValue(g, selectedStat)
     return {
       label: g.Day ? new Date(g.Day).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : "--",
@@ -144,7 +143,7 @@ export function PlayerDetailView({ player, playerLog, seasonStats, season, sport
           />
 
           <GameLogTable
-            data={playerLog}
+            data={safePlayerLog}
             selectedStat={selectedStat}
             displayLine={displayLine}
           />
