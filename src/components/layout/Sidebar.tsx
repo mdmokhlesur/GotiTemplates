@@ -28,7 +28,7 @@ const navItems = [
     href: "/dashboard",
     icon: LayoutDashboard,
   },
-  { title: "Prop Category Filters", href: "/prop-explorer", icon: Target },
+  { title: "Prop Explorer", href: "/prop-explorer", icon: Target },
   { title: "Top Plays / Best Bets", href: "/top-plays", icon: Trophy },
   { title: "Player analytics", href: "/player-analytics", icon: Users },
   { title: "Parlay Builder", href: "/parlay-builder", icon: Layers },
@@ -69,8 +69,8 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const handleSportChange = (sportId: string) => {
     dispatch(setActiveSport(sportId));
 
-    // Update URL with sport search param
-    const params = new URLSearchParams(searchParams.toString());
+    // Update URL with ONLY the sports search param, clearing others
+    const params = new URLSearchParams();
     params.set("sport", sportId.toLowerCase());
     router.push(`${pathname}?${params.toString()}`);
   };

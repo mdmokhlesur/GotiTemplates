@@ -1,16 +1,13 @@
 'use client'
-import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { StatTooltip } from '@/components/charts/StatTooltip'
-import { similarPlayers } from '@/data/mockData'
 import { nbaMatchups } from '@/data/nba'
-import { Search, ChevronDown, Activity } from 'lucide-react'
+import { Activity, ChevronDown, Search } from 'lucide-react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useState } from 'react'
+import { GameLogTable } from './GameLogTable'
 import { HitRateChart } from './HitRateChart'
+import { MatchupImpactCard } from './MatchupImpactCard'
 import { PlayerProfileCard } from './PlayerProfileCard'
 import { PlayerPropLines } from './PlayerPropLines'
-import { SimilarPlayersCard } from './SimilarPlayersCard'
-import { GameLogTable } from './GameLogTable'
-import { MatchupImpactCard } from './MatchupImpactCard'
 
 const statFilters = ['Points', 'Assists', 'Rebounds', 'Threes', 'Pts+Ast', 'Pts+Reb']
 
@@ -266,8 +263,7 @@ export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { p
           <PlayerProfileCard player={selectedPlayer} seasonStats={seasonStats} />
           <PlayerPropLines props={dynamicProps} />
           {/* TODO: Find the url from sportsDataIo */}
-          <MatchupImpactCard matchup={currentMatchup} playerName={`${selectedPlayer?.FirstName} ${selectedPlayer?.LastName}`} />
-          <SimilarPlayersCard data={similarPlayers} onSelectPlayer={handleSelectSimilar} />
+          {/* <MatchupImpactCard matchup={currentMatchup} /> */}
         </div>
 
         {/* Main Content Column */}

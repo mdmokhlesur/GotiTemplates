@@ -1,13 +1,12 @@
 'use client'
-import { Shield, Target } from 'lucide-react'
 import type { MatchupData } from '@/types'
+import { Shield, Target } from 'lucide-react'
 
 interface MatchupImpactCardProps {
   matchup: MatchupData
-  playerName: string
 }
 
-export function MatchupImpactCard({ matchup, playerName }: MatchupImpactCardProps) {
+export function MatchupImpactCard({ matchup }: MatchupImpactCardProps) {
   const diffColor = matchup.difficulty === 'easy' ? 'var(--emerald)' : matchup.difficulty === 'medium' ? 'var(--gold)' : 'var(--coral)'
   const diffBg = matchup.difficulty === 'easy' ? 'var(--emerald-light)' : matchup.difficulty === 'medium' ? 'var(--gold-light)' : 'var(--coral-light)'
 

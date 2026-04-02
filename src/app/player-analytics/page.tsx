@@ -16,7 +16,7 @@ export default async function PlayerAnalyticsPage({ searchParams }: Props) {
   const sport = searchParams?.sport || 'nba'
 
   // Fetch active players first to determine default if needed
-  const allActivePlayer = await fetch(`${baseUrl}/players/active-players?sport=${sport}`)
+  const allActivePlayer = await fetch(`${baseUrl}/players/active-players?sports=${sport}`)
   const allActivePlayerJson = await allActivePlayer.json()
   const activePlayersList = allActivePlayerJson.data || []
 
