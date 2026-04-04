@@ -24,8 +24,8 @@ export function Dashboard() {
 
   // Feature #11 KPIs
   const highEVCount = nbaProps.filter(p => p.edge >= 7).length
-  const sharpPlays = nbaEdgeFeed.filter(f => f.type === 'sharp_money').length
-  const publicTraps = nbaEdgeFeed.filter(f => f.type === 'public_trap').length
+  const lineMoves = nbaEdgeFeed.filter(f => f.type === 'line_movement').length
+  const injuryAlerts = nbaEdgeFeed.filter(f => f.type === 'injury').length
   const steamMoves = nbaEdgeFeed.filter(f => f.type === 'steam_move').length
   const aRatedPlays = nbaProps.filter(p => p.rating === 'A').length
 
@@ -65,17 +65,17 @@ export function Dashboard() {
         </div>
         <div className="card rounded-xl p-3">
           <div className="flex items-center gap-1.5 mb-1">
-            <TrendingUp className="h-3 w-3" style={{ color: 'var(--gold)' }} />
-            <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Sharp Plays</p>
+            <TrendingUp className="h-3 w-3" style={{ color: 'var(--intel-blue)' }} />
+            <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Line Moves</p>
           </div>
-          <p className="text-2xl font-bold font-body" style={{ color: 'var(--gold)' }}>{sharpPlays}</p>
+          <p className="text-2xl font-bold font-body" style={{ color: 'var(--intel-blue)' }}>{lineMoves}</p>
         </div>
         <div className="card rounded-xl p-3">
           <div className="flex items-center gap-1.5 mb-1">
-            <AlertTriangle className="h-3 w-3" style={{ color: 'var(--coral)' }} />
-            <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Public Traps</p>
+            <AlertTriangle className="h-3 w-3" style={{ color: '#F97316' }} />
+            <p className="text-[10px] font-body" style={{ color: 'var(--text-muted)' }}>Injury Alerts</p>
           </div>
-          <p className="text-2xl font-bold font-body" style={{ color: 'var(--coral)' }}>{publicTraps}</p>
+          <p className="text-2xl font-bold font-body" style={{ color: '#F97316' }}>{injuryAlerts}</p>
         </div>
         <div className="card rounded-xl p-3">
           <div className="flex items-center gap-1.5 mb-1">
@@ -135,12 +135,12 @@ export function Dashboard() {
         <div className="space-y-2">
           {nbaEdgeFeed.slice(0, 5).map(item => {
             const colors: Record<string, string> = {
-              high_ev: 'var(--emerald)', steam_move: 'var(--coral)', public_trap: 'var(--gold)',
-              sharp_money: 'var(--intel-blue)', trending_prop: 'var(--text-secondary)', injury: '#F97316',
+              high_ev: 'var(--emerald)', steam_move: 'var(--coral)', line_movement: 'var(--intel-blue)',
+              injury: '#F97316',
             }
             const icons: Record<string, string> = {
-              high_ev: '🟢', steam_move: '🔴', public_trap: '🟡',
-              sharp_money: '🔵', trending_prop: '⚪', injury: '🟠',
+              high_ev: '🟢', steam_move: '🔴', line_movement: '🔵',
+              injury: '🟠',
             }
             return (
               <div key={item.id} className="flex items-start gap-2 p-2 rounded-lg" style={{ backgroundColor: 'var(--bg-surface)' }}>
