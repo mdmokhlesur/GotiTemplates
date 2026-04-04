@@ -1,4 +1,5 @@
 import { DFSOptimizer } from './components/DFSOptimizer'
+import { Suspense } from 'react'
 
 export default async function DFSPage({
   searchParams,
@@ -19,5 +20,9 @@ export default async function DFSPage({
   const json = res.ok ? await res.json() : { data: [] };
   const players = json.data || [];
 
-  return <DFSOptimizer initialData={players} />
+  return (
+    <Suspense fallback={<div className="p-8">Loading DFS optimizer...</div>}>
+      <DFSOptimizer initialData={players} />
+    </Suspense>
+  )
 }

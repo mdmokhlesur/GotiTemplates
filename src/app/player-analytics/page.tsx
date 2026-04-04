@@ -1,5 +1,6 @@
 import { PlayerAnalytics } from './components/PlayerAnalytics'
 import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
 
 type Props = {
   searchParams?: {
@@ -10,8 +11,6 @@ type Props = {
 }
 
 export default async function PlayerAnalyticsPage({ searchParams }: Props) {
-
-
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
   const sport = searchParams?.sport || 'nba'
 
@@ -49,10 +48,14 @@ export default async function PlayerAnalyticsPage({ searchParams }: Props) {
   const playerLogJson = await playerLog.json()
   const seasonStatsJson = await seasonStats.json()
 
-  return <PlayerAnalytics
-    playerLog={playerLogJson.data || []}
-    seasonStats={seasonStatsJson.data || {}}
-    allActivePlayer={activePlayersList}
-  />
+  return (
+    <Suspense fallback={<div className="p-8">Loading analytics...</div>}>
+      <PlayerAnalytics
+        playerLog={playerLogJson.data || []}
+        seasonStats={seasonStatsJson.data || {}}
+        allActivePlayer={activePlayersList}
+      />
+    </Suspense>
+  )
 }
 

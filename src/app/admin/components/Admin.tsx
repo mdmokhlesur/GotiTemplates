@@ -63,7 +63,7 @@ export function Admin() {
       {tab === 'users' && <UserManagementTabContent search={search} setSearch={setSearch} users={filteredUsers} />}
       {tab === 'subscriptions' && <SubscriptionsTabContent />}
       {tab === 'prop-setter' && (
-        <PropSetterTabContent 
+        <PropSetterTabContent
           propPlayer={propPlayer} setPropPlayer={setPropPlayer}
           propStat={propStat} setPropStat={setPropStat}
           propLine={propLine} setPropLine={setPropLine}

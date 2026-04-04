@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation'
 import { PlayerDetailView } from '../components/PlayerDetailView'
+import { Suspense } from 'react'
 
 type Props = {
     params: { id: string }
@@ -10,7 +11,6 @@ type Props = {
 }
 
 export default async function PlayerDetailsPage({ params, searchParams }: Props) {
-
     const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL
     const sport = searchParams?.sport || 'nba'
     const season = searchParams?.season || '2026'
@@ -37,10 +37,12 @@ export default async function PlayerDetailsPage({ params, searchParams }: Props)
     }
 
     return (
-        <PlayerDetailView
-            player={selectedPlayer}
-            playerLog={playerLogJson.data || []}
-            season={season}
-        />
+        <Suspense fallback={<div className="p-8">Loading player details...</div>}>
+            <PlayerDetailView
+                player={selectedPlayer}
+                playerLog={playerLogJson.data || []}
+                season={season}
+            />
+        </Suspense>
     )
 }
