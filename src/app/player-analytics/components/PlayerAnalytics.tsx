@@ -54,8 +54,8 @@ export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { p
     }
   }
 
-  const activeLogs = playerLog || []
-  const statValues = Array.isArray(activeLogs) ? activeLogs.map((g: any) => getStatValue(g, selectedStat)) : []
+  const activeLogs = Array.isArray(playerLog) ? playerLog : (playerLog?.data && Array.isArray(playerLog.data) ? playerLog.data : [])
+  const statValues = activeLogs.map((g: any) => getStatValue(g, selectedStat))
   const avgStat = statValues.length ? statValues.reduce((a: number, b: number) => a + b, 0) / statValues.length : 0
   const sortedStats = [...statValues].sort((a, b) => a - b)
   const medianStat = sortedStats.length ? sortedStats[Math.floor(sortedStats.length / 2)] : 0
@@ -104,7 +104,7 @@ export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { p
     positive: boolean;
     odds: string;
   } => {
-    const vals = activeLogs.map((g: any) => getStatValue(g, statName))
+    const vals = Array.isArray(activeLogs) ? activeLogs.map((g: any) => getStatValue(g, statName)) : []
     const avg = vals.length ? vals.reduce((a: number, b: number) => a + b, 0) / vals.length : 0
     const hrCount = vals.filter((v: number) => v >= avg).length
     const hr = vals.length ? Math.round((hrCount / vals.length) * 100) : 0
@@ -261,22 +261,38 @@ export function PlayerAnalytics({ playerLog, seasonStats, allActivePlayer }: { p
         {/* Sidebar Column */}
         <div className="space-y-4 lg:col-span-1">
           <PlayerProfileCard player={selectedPlayer} seasonStats={seasonStats} />
-          <PlayerPropLines props={dynamicProps} />
+          {activeLogs.length > 0 && <PlayerPropLines props={dynamicProps} />}
           {/* TODO: Find the url from sportsDataIo */}
           {/* <MatchupImpactCard matchup={currentMatchup} /> */}
         </div>
 
         {/* Main Content Column */}
         <div className="space-y-4 lg:col-span-2">
-          <HitRateChart
-            data={computedHitRateBarData}
-            displayLine={displayLine}
-            viewMode={viewMode}
-            selectedStat={selectedStat}
-            hitRate={hitRate}
-            hitCount={hitCount}
-          />
-          <GameLogTable data={activeLogs?.slice(0, 12)} selectedStat={selectedStat} displayLine={displayLine} />
+          {activeLogs.length > 0 ? (
+            <>
+              <HitRateChart
+                data={computedHitRateBarData}
+                displayLine={displayLine}
+                viewMode={viewMode}
+                selectedStat={selectedStat}
+                hitRate={hitRate}
+                hitCount={hitCount}
+              />
+              <GameLogTable data={activeLogs?.slice(0, 12)} selectedStat={selectedStat} displayLine={displayLine} />
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center p-12 rounded-2xl border border-dashed text-center h-full min-h-[400px]"
+              style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border)' }}>
+              <Activity className="h-10 w-10 mb-4 opacity-20" style={{ color: 'var(--text-muted)' }} />
+              <h3 className="text-lg font-display font-semibold" style={{ color: 'var(--text-primary)' }}>No Game Logs Available</h3>
+              <p className="max-w-xs text-sm font-body mx-auto mt-2" style={{ color: 'var(--text-muted)' }}>
+                We couldn't find any game records for {selectedPlayer.FirstName} {selectedPlayer.LastName} in the {searchParams.get('season') || '2026'} season.
+                { (searchParams.get('season') && parseInt(searchParams.get('season') || '0') < 2025) &&
+                  <span className="block mt-2 font-medium" style={{ color: 'var(--gold)' }}>Limited historical data is available for older seasons.</span>
+                }
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
