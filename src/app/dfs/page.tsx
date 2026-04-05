@@ -8,7 +8,6 @@ export default async function DFSPage({
 }) {
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3030";
   const sport = searchParams?.sport || "nba";
-
   // Default to a specific date or today if not provided
   // const date = searchParams?.date || "2026-03-29"; 
   const date = searchParams?.date || new Date().toISOString().split("T")[0];
@@ -24,5 +23,4 @@ export default async function DFSPage({
     <Suspense fallback={<div className="p-8">Loading DFS optimizer...</div>}>
       <DFSOptimizer initialData={players} />
     </Suspense>
-  )
-}
+  ) }
